@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>User Form</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="eventcss.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="bg">
+  <div class="container">
+    &nbsp;
+    <h2>Create Event</h2>
+    <form>
+      <hr>
+      <div class="form-group">
+        <label for="name">Enter Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name" required  onkeypress="return onlyAlphabets(event,this);" onfocusout="IsEmpty()">
+      </div>
+      <hr>
+      <div class="form-group mail">
+        <label for="email">Enter Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"required  onfocusout="ValidateEmail()"/>
+      </div>
+      <hr>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="date">Select Date</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="far fa-calendar"></i></span>
+              <input type="date" class="form-control" id="date" placeholder="Select Date" name="date" required onfocusout="ValidateDate()">
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <label for="time">Select Time</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="far fa-clock"></i></span>
+              <input type="time" class="form-control" id="time" name="time" required>
+            </div>
+          </div>
+        </div>
+      </div>
+      	<hr>
+      <label>Upload Image</label>
+      <div class="avatar-upload">
+        <div class="avatar-edit">
+            <label for="imageUpload"><i class="fas fa-pencil-alt"></i></label>
+            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
+        </div>
+        <div class="avatar-preview">
+            <div class="img-fluid" id="imagePreview" style="background-image: url(addimage.jpeg);">
+            </div>
+        </div>
+    </div>
+    <hr>
+    <label>Venue</label>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.292207037884!2d72.52783461496759!3d23.013040884957885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e84d7c64dd71b%3A0x927997b3140345cb!2sMauryansh+Elanza!5e0!3m2!1sen!2sin!4v1545716809683" height="450" frameborder="0" style="border:0; width:100%;" allowfullscreen></iframe>
+    <hr>
+    <label>Add Participants</label>
+    <div class="autocomplete" style="width:100%;">
+      <input id="myInput" type="text" name="names" placeholder="Names">
+    </div>
+
+    <hr>
+    <button type="submit" name="button" class="btn btn-md" style="color:#fff;">Save</button>
+    &nbsp;
+  </form>
+
+
+  </div>
+</div>
+
+<script>
+// image script starts
+
+function readURL(input) {
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+          $('#imagePreview').css('background-image', 'url('+e.target.result +')');
+          $('#imagePreview').hide();
+          $('#imagePreview').fadeIn(650);
+      }
+      reader.readAsDataURL(input.files[0]);
+  }
+}
+$("#imageUpload").change(function() {
+  readURL(this);
+});
+
+// image script ends
+
+// name validation javascript starts
+function onlyAlphabets(e, t) {
+          try {
+              if (window.event) {
+                  var charCode = window.event.keyCode;
+              }
+              else if (e) {
+                  var charCode = e.which;
+              }
+              else { return true; }
+              if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || (charCode > 31 && charCode < 33))
+              {
+                document.getElementById("name").style.border = "outset #7FFF00";
+                return true;
+              }
+              else
+              {
+                document.getElementById("name").style.border = "outset #FF0000";
+                document.getElementById("name").value = "";
+                return false;
+              }
+
+          }
+          catch (err) {
+              alert(err.Description);
+          }
+        }
+
+function IsEmpty(){
+  if(document.getElementById("name").value == "" || document.getElementById("name").value == 32)
+  {
+      document.getElementById("name").style.border = "outset #FF0000";
+  }
+      return;
+}
+// name validation javascript ends
+
+// email validation starts
+function ValidateEmail()
+{
+
+ var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+ if(document.getElementById("email").value.match(mailformat))
+ {
+ document.getElementById("email").style.border = " outset #7FFF00";
+ return true;
+ }
+ else
+ {
+ document.getElementById("email").style.border = "outset #FF0000";
+ document.getElementById("email").value = "";
+ return false;
+}
+}
+// email validation ends
+
+
+
+
+// autocomplete script starts
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+/*An array containing all the country names in the world:*/
+var names = ["Alice","Bella","Cath","Deb","Elina","Farah","Grace","Hailey","Isabella","Jenny","Kim","Lisa","Michelle","Norma","Olivia","Phoebe","Quinn","Rebecca","Stella","Tina","Ursula","Venus","Winnie","Xavierre",
+"Yasmin","Zelda","Gloria","Beth","Hazel","Melanie","Rihanna","Lola","Donna","Jessica","Sheila"];
+
+/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(document.getElementById("myInput"), names);
+
+// autocomplete script ends
+
+
+
+
+
+</script>
+
+</body>
+</html>
