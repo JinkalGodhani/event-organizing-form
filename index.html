@@ -24,11 +24,13 @@
       <div class="form-group">
         <label for="name">Enter Name</label>
         <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name" required  onkeypress="return onlyAlphabets(event,this);" onfocusout="IsEmpty()">
+        <div id="validate_name"></div>
       </div>
       <hr>
       <div class="form-group mail">
         <label for="email">Enter Email</label>
         <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"required  onfocusout="ValidateEmail()"/>
+        <div id="validate_email"></div>
       </div>
       <hr>
       <div class="form-group">
@@ -37,7 +39,7 @@
             <label for="date">Select Date</label>
             <div class="input-group">
               <span class="input-group-addon"><i class="far fa-calendar"></i></span>
-              <input type="date" class="form-control" id="date" data-provide="datepicker" placeholder="Select Date" name="date" required onfocusout="ValidateDate()">
+              <input type="date" class="form-control datepicker-input" id="datepicker" onchange="checkDate()" placeholder="Select Date" name="date" required onfocusout="ValidateDate()">
             </div>
           </div>
           <div class="col-lg-6">
@@ -112,14 +114,14 @@ function onlyAlphabets(e, t) {
               if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || (charCode > 31 && charCode < 33))
               {
                 document.getElementById("name").style.border = "outset #7FFF00";
-                $("#name").parent().after("<div class='validation' style='color:#7FFF00;margin-bottom: 20px;'>Looks Good!!</div>");
                 return true;
               }
               else
               {
                 document.getElementById("name").style.border = "outset #FF0000";
                 document.getElementById("name").value = "";
-                $("#name").parent().after("<div class='validation' style='color:#FF0000;margin-bottom: 20px;'>Name cannot be numeric.</div>");
+                document.getElementById("validate_name").style.color = "#FF0000";
+                document.getElementById("validate_name").innerHTML = "Name cannot be numeric.";
                 return false;
               }
 
@@ -133,7 +135,12 @@ function IsEmpty(){
   if(document.getElementById("name").value == "" || document.getElementById("name").value == 32)
   {
       document.getElementById("name").style.border = "outset #FF0000";
-      $("#name").parent().after("<div class='validation' style='color:#FF0000;margin-bottom: 20px;'>Name cannot be empty.</div>");
+      document.getElementById("validate_name").style.color = "#FF0000";
+      document.getElementById("validate_name").innerHTML = "Name cannot be empty.";
+  }
+  else {
+    document.getElementById("validate_name").style.color = "#7FFF00";
+    document.getElementById("validate_name").innerHTML = "Looks Good!!";
   }
       return;
 }
@@ -147,14 +154,16 @@ function ValidateEmail()
  if(document.getElementById("email").value.match(mailformat))
  {
  document.getElementById("email").style.border = " outset #7FFF00";
- $("#email").parent().after("<div class='validation' style='color:#7FFF00;margin-bottom: 20px;'>Looks Good!!</div>");
+document.getElementById("validate_email").style.color = "#7FFF00";
+ document.getElementById("validate_email").innerHTML = "Looks Good!!";
  return true;
  }
  else
  {
  document.getElementById("email").style.border = "outset #FF0000";
  document.getElementById("email").value = "";
- $("#email").parent().after("<div class='validation' style='color:#FF0000;margin-bottom: 20px;'>Please enter valid email address</div>");
+ document.getElementById("validate_email").style.color = "#FF0000";
+ document.getElementById("validate_email").innerHTML = "Please enter valid email address.";
  return false;
 }
 }
@@ -270,18 +279,17 @@ autocomplete(document.getElementById("myInput"), names);
 
 // autocomplete script ends
 
-
-
-var date = new Date();
-date.setDate(date.getDate());
-
-$('#date').datepicker({
-    startDate: date
-});
-
-
 </script>
 
+<script type="text/javascript">
+ function checkDate() {
+   var selectedDate = document.getElementById('datepicker').value;
+   var now = new Date();
+   if (selectedDate < now) {
+    alert("Date must be in the future");
+   }
+ }
+</script>
 
 </body>
 </html>
